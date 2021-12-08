@@ -13,7 +13,7 @@ my $git_url = 'https://github.com/markov2/perl5-HTML-Inspect';
 WriteMakefile
   (
     NAME             => 'HTML::Inspect',
-    VERSION          => '1.00',
+    VERSION          => '1.01',
     AUTHOR           => 'Mark Overmeer <markov@cpan.org>',
     PREREQ_PM        => {
         'Encode'         => 0,
