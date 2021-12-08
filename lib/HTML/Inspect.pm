@@ -30,7 +30,10 @@ HTML::Inspect - Inspect a HTML document
 =chapter SYNOPSIS
 
     my $source    = 'http://example.com/doc';
-    my $inspector = HTML::Inspect->new(location => $source, html_ref => \$html);
+    my $inspector = HTML::Inspect->new(
+        location => $source,
+        html_ref => \$html,
+    );
     my $classic   = $inspector->collectMetaClassic;
 
 =chapter DESCRIPTION
@@ -39,19 +42,27 @@ This module extracts information from HTML, using a clean parser (L<XML::LibXML>
 Returned structures may need further processing.  Please suggest additional
 extractors.
 
+This module is part of the "Crawl Pipeline".  You can find a B<detailed description>
+of each of the output of the methods below on its web-page at
+F<https://pipeline.shared-search.eu/extract/>
+
+B<URL normalization> is a really crucial feature of the output of these methods.
+You can use this separately via functions in L<HTML::Inspect::Normalization>.
+
 =chapter METHODS
 
 =section Constructors
 
 =c_method new %options
 
-The required C<html_ref> is a reference to a (possibly troublesome) HTML string.
-Passed as reference to avoid copying large strings.
+=requires html_ref REF-String
+References to a (possibly troublesome) HTML string.  Passed as reference
+to avoid copying large strings.
 
-The required C<location> option is an absolute url as a string or L<URI>
-instance, which explains where the HTML was found.  It is used as base
-of relative URLs found in the HTML, unless it contains as C<< <base> >>
-element.
+=requires location URL
+An absolute url as a string or L<URI> instance, which explains where the
+HTML was found.  It is used as base of relative URLs found in the HTML,
+unless it contains as C<< <base> >> element.
 
 =cut
 
@@ -138,6 +149,8 @@ sub _xpc() { $_[0]->{HI_xpc} }
 
 =chapter Collecting
 
+=section The E<lt>linkE<gt> element
+
 =method collectLinks 
 
 Collect all C<< <link> >> relations from the document.  The returned HASH
@@ -148,6 +161,8 @@ key will be a normalized, absolute translation of the C<href> attribute.
 =cut
 
 # All collectLinks* in the ::Links.pm mixin
+
+=section The E<lt>metaE<gt> element
 
 =method collectMetaClassic %options
 
@@ -190,6 +205,15 @@ variety of fields and may be order dependend!!!
 
 # All collectMeta* in ::Meta.pm mixin
 
+=section References
+
+The amount of references is large (easily a few hundred per HTML page),
+so you may wat to specify a filter.
+The C<%filter> rules will produce a subset of the links found.  You can
+use: C<http_only> (returning only http and https links), C<mailto_only>,
+C<maximum_set> (returning only the first C<n> links) and C<matching>,
+returning links matching a certain regex.
+
 =method collectReferencesFor $tag, $attr, %filter
 
 Returns an ARRAY of unique normalized URIs, which where found with the
@@ -197,24 +221,22 @@ C<$tag> attribute C<$attr>.  For instance, tag C<image> attribute C<src>.
 The URIs are in their textual order in the document, where only the
 first encounter is recorded.
 
-The C<%filter> rules will produce a subset of the links found.  You can
-use: C<http_only> (returning only http and https links), C<mailto_only>,
-C<maximum_set> (returning only the first C<n> links) and C<matching>,
-returning links matching a certain regex.
-
-
 =method collectReferences %filter
 
 Collects all references from document.  Method C<collectReferencesFor()>
 is called for a list of known tag/attribute pairs, and returned as a
-HASH of ARRAYs.  The keys of the HASH have format "$tag\_$attribute".
+HASH of ARRAYs.  The keys of the HASH have format "$tag_$attribute".
 =cut
 
 ### collectReferences*() are in mixin file ::References
 
+=section Other
 
 =method collectOpenGraph
+Returns structured OpenGraph information, when available in the HTML.
 
+The logic really understands OpenGraph, and simplifies access to it:
+facts which may appear multiple times will always be returned as ARRAY.
 =cut
 
 ### collectOpenGraph() is in mixin file ::OpenGraph
@@ -222,6 +244,10 @@ HASH of ARRAYs.  The keys of the HASH have format "$tag\_$attribute".
 =chapter SEE ALSO
 
 L<XML::LibXML>, L<Log::Report>
+
+This software is a component of the Crawl Pipeline,
+F<https://pipeline.shared-search.eu>.
+Development was made possible with a generous gift by the NLnet Foundation.
 
 =chapter AUTHORS and COPYRIGHT
     

@@ -19,9 +19,15 @@ Inline->init;
 
 our @EXPORT = qw(set_page_base normalize_url);
 
+# The INHERITANCE chapter is overruled, because Inline::C changes ISA
+
 =chapter NAME
 
 HTML::Inspect::Normalize - normalize urls
+
+=chapter INHERITANCE
+  HTML::Inspect::Normalize
+    is an Exporter
 
 =chapter SYNOPSIS
 
@@ -74,6 +80,8 @@ sub normalize_url($) {
 }
 
 =chapter DETAILS
+
+See also F<https://pipeline.shared-search.eu/extract/normalize.html>
 
 The following actions are taken:
 
