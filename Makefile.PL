@@ -21,7 +21,7 @@ WriteMakefile
         'File::Slurper'  => 0.12,
         'Inline::C'      => 0,
         'Log::Report'    => 1.32,
-        'Net::LibIDN2'   => 1.01,
+        'Net::LibIDN2'   => 1.02,
         'Scalar::Util'   => 0,
         'Test::More'     => 0,
         'URI'            => 5.09,

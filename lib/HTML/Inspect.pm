@@ -47,7 +47,7 @@ of each of the output of the methods below on its web-page at
 F<https://pipeline.shared-search.eu/extract/>
 
 B<URL normalization> is a really crucial feature of the output of these methods.
-You can use this separately via functions in L<HTML::Inspect::Normalization>.
+You can use this separately via functions in L<HTML::Inspect::Normalize>.
 
 =chapter METHODS
 
@@ -117,24 +117,19 @@ sub _init($) {
 }
 
 #-------------------------
-
-=chapter Accessors
+=section Accessors
 
 =method location
-
 The L<URI> object which represents the C<location> parameter
 which was passed as default base for relative links to C<new()>.
-
 =cut
 
 sub location() { $_[0]->{HI_location} }
 
 =method base
-
 The base URI, which is used for relative links in the page.  This is the
 C<location>, unless the HTML contains a C<< <base href> >> declaration.
 The base URI is a string representation, in absolute and normalized form.
-
 =cut
 
 sub base() { $_[0]->{HI_base} }
@@ -146,10 +141,9 @@ sub _doc() { $_[0]->{HI_doc} }
 sub _xpc() { $_[0]->{HI_xpc} }
 
 #-------------------------
+=section Collecting
 
-=chapter Collecting
-
-=section The E<lt>linkE<gt> element
+=subsection The E<lt>linkE<gt> element
 
 =method collectLinks 
 
@@ -162,7 +156,7 @@ key will be a normalized, absolute translation of the C<href> attribute.
 
 # All collectLinks* in the ::Links.pm mixin
 
-=section The E<lt>metaE<gt> element
+=subsection The E<lt>metaE<gt> element
 
 =method collectMetaClassic %options
 
@@ -175,23 +169,21 @@ many names to be useful for everyone.
 
     {  'http-equiv' => { 'content-type' => 'text/plain' },
         charset => 'UTF-8',
-        name => { author => 'John Smith' , description => 'The John Smith\'s page.'},
+        name => { author => 'John Smith', description => 'The John Smith\'s page.'},
     }
 
 
 =method collectMetaNames %options
-
-Returns a HASH with all C<< <meta> >> records which have both a C<name> and a
-C<content> attribute.  These are used as key-value pairs for many, many different
-purposes.
+Returns a HASH with all C<< <meta> >> records which have both a C<name>
+and a C<content> attribute.  These are used as key-value pairs for many,
+many different purposes.
 
 =example
 
-   { author => 'John Smith' , description => 'The John Smith\'s page.'}
+   { author => 'John Smith', description => 'The John Smith\'s page.'}
 
 
 =method collectMeta %options
-
 Returns an ARRAY of B<all> kinds of C<< <meta> >> records, which have a wide
 variety of fields and may be order dependend!!!
 
@@ -205,7 +197,7 @@ variety of fields and may be order dependend!!!
 
 # All collectMeta* in ::Meta.pm mixin
 
-=section References
+=subsection References
 
 The amount of references is large (easily a few hundred per HTML page),
 so you may wat to specify a filter.
@@ -215,14 +207,12 @@ C<maximum_set> (returning only the first C<n> links) and C<matching>,
 returning links matching a certain regex.
 
 =method collectReferencesFor $tag, $attr, %filter
-
 Returns an ARRAY of unique normalized URIs, which where found with the
 C<$tag> attribute C<$attr>.  For instance, tag C<image> attribute C<src>.
 The URIs are in their textual order in the document, where only the
 first encounter is recorded.
 
 =method collectReferences %filter
-
 Collects all references from document.  Method C<collectReferencesFor()>
 is called for a list of known tag/attribute pairs, and returned as a
 HASH of ARRAYs.  The keys of the HASH have format "$tag_$attribute".
@@ -254,11 +244,6 @@ Development was made possible with a generous gift by the NLnet Foundation.
     Mark Overmeer
     CPAN ID: MARKOV
     markov at cpan dot org
-
-    Красимир Беров
-    CPAN ID: BEROV
-    berov на cpan точка org
-    https://studio-berov.eu
 
 This is free software, licensed under: The Artistic License 2.0 (GPL
 Compatible) The full text of the license can be found in the LICENSE
